@@ -9,10 +9,13 @@ import {
   Trash2,
   X,
 } from 'lucide-react'
-import { Shop, products, categories, type CategoryFilter } from '@/components/Shop'
+import { Shop, products, type CategoryFilter } from '@/components/Shop'
 import { OurStory } from '@/components/OurStory'
 import { Journey } from '@/components/Journey'
 import { Journal } from '@/components/Journal'
+import { CheckoutModal } from '@/components/CheckoutModal'
+import { OrderConfirmation } from '@/components/OrderConfirmation'
+import type { OrderSnapshot, ProductWithQuantity } from '@/lib/order'
 
 type PageKey = 'shop' | 'story' | 'journey' | 'journal'
 
@@ -46,6 +49,10 @@ export default function Page() {
   const [cart, setCart] = useState<Record<number, number>>({})
   const [cartOpen, setCartOpen] = useState(false)
 
+  const [checkoutOpen, setCheckoutOpen] = useState(false)
+  const [confirmationOpen, setConfirmationOpen] = useState(false)
+  const [lastOrder, setLastOrder] = useState<OrderSnapshot | null>(null)
+
   useEffect(() => {
     setCurrentPage(getPageFromHash(window.location.hash))
     setIsHydrated(true)
@@ -60,6 +67,10 @@ export default function Page() {
   }, [])
 
   const cartItems = products.filter((product) => cart[product.id])
+  const cartItemsWithQty: ProductWithQuantity[] = cartItems.map((p) => ({
+    ...p,
+    quantity: cart[p.id],
+  }))
   const itemCount = Object.values(cart).reduce((sum, quantity) => sum + quantity, 0)
   const subtotal = cartItems.reduce((sum, product) => sum + product.price * cart[product.id], 0)
 
@@ -75,6 +86,29 @@ export default function Page() {
       }
       return { ...current, [id]: next }
     })
+  }
+
+  function openCheckout() {
+    if (cartItems.length === 0) return
+    setCartOpen(false)
+    setCheckoutOpen(true)
+  }
+
+  function handlePlaceOrder(order: OrderSnapshot) {
+    setLastOrder(order)
+    setCart({})
+    setCheckoutOpen(false)
+    setConfirmationOpen(true)
+  }
+
+  function handleContinueShopping() {
+    setConfirmationOpen(false)
+    setLastOrder(null)
+    if (window.location.hash !== '#shop') {
+      window.location.hash = '#shop'
+    } else {
+      setCurrentPage('shop')
+    }
   }
 
   function renderPage() {
@@ -248,10 +282,13 @@ export default function Page() {
                 <div className="border-t border-[#deddd7] px-6 py-6">
                   <div className="flex justify-between text-sm">
                     <span>Subtotal</span>
-                    <span>${subtotal}</span>
+                    <span>${subtotal.toFixed(2)}</span>
                   </div>
                   <p className="mt-2 text-xs text-[#77756e]">Shipping and taxes calculated at checkout.</p>
-                  <button className="mt-5 w-full bg-[#1c1c1a] py-4 text-xs font-semibold tracking-[0.14em] text-white uppercase transition hover:bg-[#b95d3d]">
+                  <button
+                    onClick={openCheckout}
+                    className="mt-5 w-full bg-[#1c1c1a] py-4 text-xs font-semibold tracking-[0.14em] text-white uppercase transition hover:bg-[#b95d3d]"
+                  >
                     Checkout
                   </button>
                 </div>
@@ -272,6 +309,20 @@ export default function Page() {
           </aside>
         </div>
       )}
+
+      <CheckoutModal
+        open={checkoutOpen}
+        items={cartItemsWithQty}
+        subtotal={subtotal}
+        onClose={() => setCheckoutOpen(false)}
+        onPlaceOrder={handlePlaceOrder}
+      />
+
+      <OrderConfirmation
+        open={confirmationOpen}
+        order={lastOrder}
+        onContinueShopping={handleContinueShopping}
+      />
     </main>
   )
 }

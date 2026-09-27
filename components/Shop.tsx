@@ -19,12 +19,14 @@ type Product = {
 }
 
 const products: Product[] = [
+  { id: 1, name: 'Arc Wireless Headphones', category: 'Electronics', price: 189, rating: 4.9, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=85', tone: 'bg-[#e7e3dc]' },
   { id: 2, name: 'Daily Carry Tote', category: 'Apparel', price: 78, rating: 4.8, image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=900&q=85', tone: 'bg-[#e6ddd5]' },
   { id: 3, name: 'Form Ceramic Set', category: 'Home & Kitchen', price: 64, rating: 4.7, image: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=900&q=85', tone: 'bg-[#e3e4df]' },
   { id: 4, name: 'Studio Desk Lamp', category: 'Home & Kitchen', price: 128, rating: 4.9, image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=900&q=85', tone: 'bg-[#e4ddd6]' },
   { id: 5, name: 'Field Chronograph', category: 'Apparel', price: 245, rating: 4.8, image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=85', tone: 'bg-[#dddeda]' },
   { id: 6, name: 'Cloud Knit Sweater', category: 'Apparel', price: 96, rating: 4.6, image: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=900&q=85', tone: 'bg-[#e5e0da]' },
-  { id: 7, name: 'Linen Tableware', category: 'Home & Kitchen', price: 52, rating: 4.7, image: 'https://images.unsplash.com/photo-1603199506016-b9a594b593c0?auto=format&fit=crop&w=900&q=85', tone: 'bg-[#e7e0d9]' },
+  { id: 7, name: 'Tactile Keyboard', category: 'Electronics', price: 149, rating: 4.8, image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=900&q=85', tone: 'bg-[#e3e2de]' },
+  { id: 8, name: 'Linen Tableware', category: 'Home & Kitchen', price: 52, rating: 4.7, image: 'https://images.unsplash.com/photo-1603199506016-b9a594b593c0?auto=format&fit=crop&w=900&q=85', tone: 'bg-[#e7e0d9]' },
 ]
 
 const categories = ['All', 'Electronics', 'Apparel', 'Home & Kitchen'] as const
